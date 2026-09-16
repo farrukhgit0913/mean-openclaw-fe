@@ -60,21 +60,21 @@ export class App
   ngOnInit(): void {
     this.loadMessages();
 
-    this.openclaw.onWhatsAppMessage(
-      (message) => {
-        console.log(
-          'Angular received WhatsApp message:',
-          message
-        );
+    // this.openclaw.onWhatsAppMessage(
+    //   (message) => {
+    //     console.log(
+    //       'Angular received WhatsApp message:',
+    //       message
+    //     );
 
-        this.messages.update(
-          (messages) => [
-            ...messages,
-            message
-          ]
-        );
-      }
-    );
+    //     this.messages.update(
+    //       (messages) => [
+    //         ...messages,
+    //         message
+    //       ]
+    //     );
+    //   }
+    // );
   }
 
   private loadMessages(): void {

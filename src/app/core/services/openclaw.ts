@@ -16,10 +16,10 @@ import {
   Observable
 } from 'rxjs';
 
-import {
-  io,
-  Socket
-} from 'socket.io-client';
+// import {
+//   io,
+//   Socket
+// } from 'socket.io-client';
 
 export interface WhatsAppSendRequest {
   to: string;
@@ -81,62 +81,62 @@ export class OpenclawService {
   private readonly apiUrl =
     'http://localhost:3000/api/openclaw';
 
-  private socket?: Socket;
+//   private socket?: Socket;
 
-  private connectSocket(): void {
-    if (
-      !isPlatformBrowser(
-        this.platformId
-      )
-    ) {
-      return;
-    }
+//   private connectSocket(): void {
+//     if (
+//       !isPlatformBrowser(
+//         this.platformId
+//       )
+//     ) {
+//       return;
+//     }
 
-    if (this.socket) {
-      return;
-    }
+//     if (this.socket) {
+//       return;
+//     }
 
-    this.socket =
-      io(
-        'http://localhost:3000',
-        {
-          transports: [
-            'websocket',
-            'polling'
-          ]
-        }
-      );
+//     this.socket =
+//       io(
+//         'http://localhost:3000',
+//         {
+//           transports: [
+//             'websocket',
+//             'polling'
+//           ]
+//         }
+//       );
 
-    this.socket.on(
-      'connect',
-      () => {
-        console.log(
-          'Socket.IO connected:',
-          this.socket?.id
-        );
-      }
-    );
+//     this.socket.on(
+//       'connect',
+//       () => {
+//         console.log(
+//           'Socket.IO connected:',
+//           this.socket?.id
+//         );
+//       }
+//     );
 
-    this.socket.on(
-      'disconnect',
-      (reason) => {
-        console.log(
-          'Socket.IO disconnected:',
-          reason
-        );
-      }
-    );
+//     this.socket.on(
+//       'disconnect',
+//       (reason) => {
+//         console.log(
+//           'Socket.IO disconnected:',
+//           reason
+//         );
+//       }
+//     );
 
-    this.socket.on(
-      'connect_error',
-      (error) => {
-        console.error(
-          'Socket.IO connection error:',
-          error
-        );
-      }
-    );
-  }
+//     this.socket.on(
+//       'connect_error',
+//       (error) => {
+//         console.error(
+//           'Socket.IO connection error:',
+//           error
+//         );
+//       }
+//     );
+//   }
 
   sendWhatsAppMessage(
     request: WhatsAppSendRequest
@@ -154,16 +154,16 @@ export class OpenclawService {
     );
   }
 
-  onWhatsAppMessage(
-    callback: (
-      message: WhatsAppMessage
-    ) => void
-  ): void {
-    this.connectSocket();
+//   onWhatsAppMessage(
+//     callback: (
+//       message: WhatsAppMessage
+//     ) => void
+//   ): void {
+//     this.connectSocket();
 
-    this.socket?.on(
-      'whatsapp:message',
-      callback
-    );
-  }
+//     this.socket?.on(
+//       'whatsapp:message',
+//       callback
+//     );
+//   }
 }
