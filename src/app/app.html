@@ -1,104 +1,220 @@
-<main class="dashboard">
+<div class="app-shell">
 
-  <section class="card">
+  <header class="app-header">
 
-    <header class="header">
-      <div>
-        <p class="eyebrow">
-          MEAN + OpenClaw
-        </p>
+    <div>
+      <h1>WhatsApp AI Chat</h1>
 
-        <h1>
-          WhatsApp Messenger
-        </h1>
+      <p>
+        MEAN + OpenClaw
+      </p>
+    </div>
 
-        <p class="subtitle">
-          Send WhatsApp messages through your
-          OpenClaw Gateway.
-        </p>
-      </div>
+    <div class="connection-status">
+      <span class="status-dot"></span>
+      OpenClaw Connected
+    </div>
 
-      <div class="status">
-        <span class="status-dot"></span>
-        OpenClaw Connected
-      </div>
-    </header>
+  </header>
 
-    <form
-      class="form"
-      (ngSubmit)="sendWhatsAppMessage()"
-    >
 
-      <div class="field">
+  <main class="chat-container">
 
-        <label for="phone">
-          WhatsApp Number
-        </label>
+    <section class="chat-card">
 
-        <input
-          id="phone"
-          name="phone"
-          type="tel"
-          placeholder="+923062762437"
-          [ngModel]="phoneNumber()"
-          (ngModelChange)="phoneNumber.set($event)"
-          autocomplete="tel"
-        />
+      <div class="chat-header">
 
-        <small>
-          Use international E.164 format.
-        </small>
+        <div>
+          <h2>WhatsApp Messages</h2>
 
-      </div>
-
-      <div class="field">
-
-        <label for="message">
-          Message
-        </label>
-
-        <textarea
-          id="message"
-          name="message"
-          rows="6"
-          placeholder="Type your WhatsApp message..."
-          [ngModel]="message()"
-          (ngModelChange)="message.set($event)"
-        ></textarea>
-
-      </div>
-
-      @if (successMessage()) {
-        <div class="alert success">
-          ✓ {{ successMessage() }}
+          <span>
+            Real-time messages
+          </span>
         </div>
-      }
 
-      @if (errorMessage()) {
-        <div class="alert error">
-          {{ errorMessage() }}
-        </div>
-      }
+      </div>
 
-      <button
-        type="submit"
-        [disabled]="loading()"
+
+      <div
+        class="messages"
+        #messagesContainer
       >
-        @if (loading()) {
-          Sending...
-        } @else {
-          Send WhatsApp Message
+
+        @if (loadingMessages()) {
+
+          <div class="empty-state">
+            Loading messages...
+          </div>
+
         }
-      </button>
+        @else if (messages().length === 0) {
 
-    </form>
+          <div class="empty-state">
 
-    <footer>
-      Angular → Express → OpenClaw → WhatsApp
-    </footer>
+            <div class="empty-icon">
+              💬
+            </div>
 
-  </section>
+            <h3>No messages yet</h3>
 
-</main>
+            <p>
+              Send a WhatsApp message to your
+              OpenClaw number to see it here.
+            </p>
+
+          </div>
+
+        }
+        @else {
+
+          @for (
+            message of messages();
+            track trackMessage($index, message)
+          ) {
+
+            <div
+              class="message-row"
+              [class.inbound]="
+                message.direction === 'inbound'
+              "
+              [class.outbound]="
+                message.direction === 'outbound'
+              "
+            >
+
+              <div class="message-bubble">
+
+                @if (
+                  message.direction === 'inbound'
+                ) {
+
+                  <div class="sender">
+
+                    {{
+                      message.senderName ||
+                      message.from
+                    }}
+
+                  </div>
+
+                }
+
+                <div class="message-text">
+                  {{ message.message }}
+                </div>
+
+                <div class="message-meta">
+
+                  <span>
+                    {{
+                      formatTime(
+                        message.timestamp
+                      )
+                    }}
+                  </span>
+
+                  <span>
+                    {{
+                      message.direction ===
+                      'inbound'
+                        ? 'Incoming'
+                        : 'Sent'
+                    }}
+                  </span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          }
+
+        }
+
+      </div>
+
+
+      <div class="composer">
+
+        <div class="field">
+
+          <label for="phone">
+            WhatsApp Number
+          </label>
+
+          <input
+            id="phone"
+            type="text"
+            [ngModel]="phoneNumber()"
+            (ngModelChange)="
+              phoneNumber.set($event)
+            "
+            placeholder="+923001234567"
+            autocomplete="off"
+          />
+
+        </div>
+
+
+        <div class="message-input-row">
+
+          <input
+            type="text"
+            [ngModel]="message()"
+            (ngModelChange)="
+              message.set($event)
+            "
+            (keyup.enter)="
+              sendWhatsAppMessage()
+            "
+            placeholder="Type a WhatsApp message..."
+            autocomplete="off"
+          />
+
+          <button
+            type="button"
+            [disabled]="loading()"
+            (click)="
+              sendWhatsAppMessage()
+            "
+          >
+
+            @if (loading()) {
+              Sending...
+            }
+            @else {
+              Send
+            }
+
+          </button>
+
+        </div>
+
+
+        @if (successMessage()) {
+
+          <div class="success">
+            {{ successMessage() }}
+          </div>
+
+        }
+
+
+        @if (errorMessage()) {
+
+          <div class="error">
+            {{ errorMessage() }}
+          </div>
+
+        }
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
 
 <router-outlet />
