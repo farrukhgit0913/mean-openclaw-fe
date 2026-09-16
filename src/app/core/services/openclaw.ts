@@ -17,17 +17,44 @@ export interface OpenClawChatResponse {
   conversationId?: string;
 }
 
+export interface WhatsAppSendRequest {
+  to: string;
+  message: string;
+}
+
+export interface WhatsAppSendResponse {
+  success: boolean;
+  data?: {
+    success: boolean;
+    messageId: string | null;
+    output: string;
+  };
+  message?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class OpenclawService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'http://localhost:3000/api/openclaw';
+  private readonly apiUrl =
+    'http://localhost:3000/api/openclaw';
 
-  chat(request: OpenClawChatRequest): Observable<OpenClawChatResponse> {
+  chat(
+    request: OpenClawChatRequest
+  ): Observable<OpenClawChatResponse> {
     return this.http.post<OpenClawChatResponse>(
       `${this.apiUrl}/chat`,
+      request
+    );
+  }
+
+  sendWhatsAppMessage(
+    request: WhatsAppSendRequest
+  ): Observable<WhatsAppSendResponse> {
+    return this.http.post<WhatsAppSendResponse>(
+      `${this.apiUrl}/whatsapp/send`,
       request
     );
   }
