@@ -1,0 +1,243 @@
+<div class="app-shell">
+
+  <header class="app-header">
+
+    <div>
+
+      <h1>WhatsApp AI Chat <p>
+        MEAN + OpenClaw
+      </p></h1>
+    </div>
+
+    <div class="connection-status">
+
+      <span class="status-dot"></span>
+
+      OpenClaw Connected
+
+    </div>
+
+  </header>
+
+
+  <main class="chat-container">
+
+    <section class="chat-card">
+
+      <div class="chat-header">
+
+        <div>
+
+          <h2>WhatsApp Messages</h2>
+
+          <span>
+            Real-time messages
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="messages"
+        #messagesContainer
+      >
+
+        @if (loadingMessages()) {
+
+          <div class="empty-state">
+
+            Loading messages...
+
+          </div>
+
+        }
+
+        @else if (messages().length === 0) {
+
+          <div class="empty-state">
+
+            <div class="empty-icon">
+              💬
+            </div>
+
+            <h3>No messages yet</h3>
+
+            <p>
+              Send a WhatsApp message to your
+              OpenClaw number to see it here.
+            </p>
+
+          </div>
+
+        }
+
+        @else {
+
+          @for (
+            message of messages();
+            track trackMessage($index, message)
+          ) {
+
+            <div
+              class="message-row"
+              [class.inbound]="
+                message.direction === 'inbound'
+              "
+              [class.outbound]="
+                message.direction === 'outbound'
+              "
+            >
+
+              <div class="message-bubble">
+
+                @if (
+                  message.direction === 'inbound'
+                ) {
+
+                  <div class="sender">
+
+                    {{
+                      message.senderName ||
+                      message.from
+                    }}
+
+                  </div>
+
+                }
+
+                <div class="message-text">
+
+                  {{ message.message }}
+
+                </div>
+
+                <div class="message-meta">
+
+                  <span>
+
+                    {{
+                      formatTime(
+                        message.timestamp
+                      )
+                    }}
+
+                  </span>
+
+                  <span>
+
+                    {{
+                      message.direction ===
+                      'inbound'
+                        ? 'Incoming'
+                        : 'Sent'
+                    }}
+
+                  </span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          }
+
+        }
+
+      </div>
+
+
+      <div class="composer">
+
+        <div class="field">
+
+          <label for="phone">
+
+            WhatsApp Number
+
+          </label>
+
+          <input
+            id="phone"
+            type="text"
+            [ngModel]="phoneNumber()"
+            (ngModelChange)="
+              phoneNumber.set($event)
+            "
+            placeholder="+923001234567"
+            autocomplete="off"
+          />
+
+        </div>
+
+
+        <div class="message-input-row">
+
+          <input
+            type="text"
+            [ngModel]="message()"
+            (ngModelChange)="
+              message.set($event)
+            "
+            (keyup.enter)="
+              sendWhatsAppMessage()
+            "
+            placeholder="Type a WhatsApp message..."
+            autocomplete="off"
+          />
+
+          <button
+            type="button"
+            [disabled]="loading()"
+            (click)="
+              sendWhatsAppMessage()
+            "
+          >
+
+            @if (loading()) {
+
+              Sending...
+
+            }
+
+            @else {
+
+              Send
+
+            }
+
+          </button>
+
+        </div>
+
+
+        @if (successMessage()) {
+
+          <div class="success">
+
+            {{ successMessage() }}
+
+          </div>
+
+        }
+
+
+        @if (errorMessage()) {
+
+          <div class="error">
+
+            {{ errorMessage() }}
+
+          </div>
+
+        }
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>

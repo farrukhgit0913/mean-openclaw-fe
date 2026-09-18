@@ -6,6 +6,100 @@
   box-sizing: border-box;
 }
 
+.demo-selector {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  background: #f5f7fb;
+}
+
+.selector-card {
+  width: 100%;
+  max-width: 760px;
+  padding: 48px;
+  background: #fff;
+  border: 1px solid #e3e7ef;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(20, 30, 50, 0.06);
+  text-align: center;
+}
+
+.selector-card .eyebrow {
+  margin-bottom: 8px;
+  color: #4f46e5;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.selector-card h1 {
+  margin: 0;
+  font-size: 32px;
+  color: #172033;
+}
+
+.selector-card > p {
+  margin: 10px 0 32px;
+  color: #697386;
+}
+
+.demo-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.demo-button {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px;
+  border: 1px solid #e3e7ef;
+  border-radius: 14px;
+  background: #fff;
+  color: #172033;
+  text-align: left;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.demo-button:hover {
+  border-color: #6366f1;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(20, 30, 50, 0.08);
+}
+
+.demo-button .icon {
+  font-size: 28px;
+}
+
+.demo-button strong,
+.demo-button small {
+  display: block;
+}
+
+.demo-button strong {
+  font-size: 15px;
+}
+
+.demo-button small {
+  margin-top: 5px;
+  color: #7a8496;
+  font-size: 12px;
+}
+
+@media (max-width: 650px) {
+  .selector-card {
+    padding: 30px 20px;
+  }
+
+  .demo-buttons {
+    grid-template-columns: 1fr;
+  }
+}
+
 .app-shell {
   min-height: 100vh;
   background: #f4f7fb;
