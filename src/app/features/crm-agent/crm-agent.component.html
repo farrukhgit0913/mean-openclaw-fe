@@ -21,28 +21,61 @@
       </div>
 
       <div class="messages">
-        <div class="message assistant">
-          <div class="avatar">AI</div>
+        @for (message of messages(); track $index) {
+          <div
+            class="message"
+            [class.user]="message.role === 'user'"
+            [class.assistant]="message.role === 'assistant'"
+          >
+            <div class="avatar">
+              {{ message.role === 'assistant' ? 'AI' : 'You' }}
+            </div>
 
-          <div class="bubble">
-            <strong>OpenClaw</strong>
-            <p>
-              Hello! I can help you search customers, create or update
-              customer records, check customer information, and send
-              WhatsApp messages.
-            </p>
+            <div class="bubble">
+              <strong>
+                {{ message.role === 'assistant' ? 'OpenClaw' : 'You' }}
+              </strong>
+
+              <p>
+                {{ message.content }}
+              </p>
+            </div>
           </div>
-        </div>
+        }
+
+        @if (loading()) {
+          <div class="message assistant">
+            <div class="avatar">AI</div>
+
+            <div class="bubble">
+              <strong>OpenClaw</strong>
+              <p>Thinking...</p>
+            </div>
+          </div>
+        }
       </div>
 
       <div class="composer">
         <input
           type="text"
+          [ngModel]="input()"
+          (ngModelChange)="input.set($event)"
+          (keyup.enter)="sendMessage()"
           placeholder="Ask the CRM agent..."
+          autocomplete="off"
+          [disabled]="loading()"
         />
 
-        <button type="button">
-          Send
+        <button
+          type="button"
+          [disabled]="loading() || !input().trim()"
+          (click)="sendMessage()"
+        >
+          @if (loading()) {
+            Sending...
+          } @else {
+            Send
+          }
         </button>
       </div>
     </section>
